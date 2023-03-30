@@ -89,15 +89,15 @@ def deleteAll():
 
 
 def upscale():
-    # Create an SR object
-    sr = dnn_superres.DnnSuperResImpl_create()
-
-    # Read the desired model
-    path = "ESPCN_x4.pb"
-    sr.readModel(path)
-
-    # Set the desired model and scale to get correct pre- and post-processing
-    sr.setModel("espcn", 4)
+    # # Create an SR object
+    # sr = dnn_superres.DnnSuperResImpl_create()
+    #
+    # # Read the desired model
+    # path = "ESPCN_x4.pb"
+    # sr.readModel(path)
+    #
+    # # Set the desired model and scale to get correct pre- and post-processing
+    # sr.setModel("espcn", 4)
 
     firstIndex = 5
     secondIndex = 5
@@ -107,8 +107,14 @@ def upscale():
             image_name = 'benur_0' + str(first + 1) + '_0' + str(second + 1) + '.png'
             image = cv2.imread(image_name)
 
+            scale_percent = 400  # percent of original size
+            width = int(image.shape[1] * scale_percent / 100)
+            height = int(image.shape[0] * scale_percent / 100)
+            dim = (width, height)
+
             # Upscale the image
-            result = sr.upsample(image)
+            result = cv2.resize(image, dim, interpolation=cv2.INTER_LINEAR)
+            # result = sr.upsample(image)
             cv2.imwrite(image_name, result)
             print(image_name)
 
