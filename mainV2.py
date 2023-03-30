@@ -17,8 +17,8 @@ import os
 
 import serial
 
-ser = serial.Serial(port="COM5",
-                    baudrate=9600,
+ser = serial.Serial(port="/dev/ttyS0",
+                    baudrate=38400,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_ONE,
                     bytesize=serial.EIGHTBITS,
@@ -77,91 +77,6 @@ def increaseContrast(img, precentage):
     stop = time.perf_counter()
     print("finish adding contrast in " + str(round(stop - start, 2)) + " seconds")
     return image
-
-
-# def crop_image():
-#     check = 0
-#     loop = 0
-#     for image_index in range(2):
-#         folder_name = 'data/'
-#         image_name = folder_name + str(image_index + 1) + '.jpg'
-#
-#         # ---------------- using simulation image -------------------
-#         # img = cv2.imread(image_name)
-#         # img = img[74:954,517:1397,:] #active this code when using new env
-#
-#         # ---------------- using video input -------------------
-#         cam = cv2.VideoCapture('0,0,0 - 05-April-2022 10:28:33(1).mp4')
-#         # cam = cv2.VideoCapture(0)
-#         if not cam.isOpened():
-#             messagebox.showerror("Error !", "Kamera tidak terhubung ! Harap memeriksa koneksi kamera ...")
-#             raise Exception("Could not open video device")
-#
-#         cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-#         cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-#         # cam.set(cv2.CAP_PROP_AUTOFOCUS, 0)
-#
-#         limit = random.randint(10, 50)
-#         print(limit)
-#         start = time.perf_counter()
-#         while cam.isOpened():
-#             ret, frame = cam.read()
-#             if (ret == True):
-#                 loop += 1
-#                 # check = checkBacklight(frame)
-#                 # if(check < 16000):
-#                 #    messagebox.showerror("Error !", "Backlight tidak menyala ! Harap memeriksa sambungan backlight ...")
-#                 #    cam.release()
-#                 #    break
-#                 if loop > limit:  # give 6s delay for every image captured
-#                     loop = 0
-#                     check = 0
-#                     img = frame
-#                     stop = time.perf_counter()
-#                     print("\nfinish taking capture in " + str(round(stop - start, 2)) + " seconds\n")
-#                     cam.release()
-#                     break
-#             else:
-#                 print("Error capture")
-#
-#         img = img[74:954, 517:1397, :]  # active this code when using new env
-#         cv2.imwrite(image_name, img)
-#
-#         h, w, c = img.shape
-#
-#         # need to change width & height devider when using new env !!!!
-#         w_constant = w / 2
-#         h_constant = h / 2
-#
-#         image_part_index = 0
-#
-#         for index_w in range(2):
-#             for index_h in range(2):
-#                 start_width = int(w_constant * index_w)
-#                 end_width = int(w_constant * (index_w + 1))
-#
-#                 start_height = int(h_constant * index_h)
-#                 end_height = int(h_constant * (index_h + 1))
-#
-#                 current_index = image_part_index
-#
-#                 # For training image set
-#                 # section_name = 'PL_8_' + str(image_index+1) + '_'
-#                 # file_name = section_name + str(image_index+1) + '_' + str(image_part_index) + '.jpg'
-#
-#                 # For testing image set
-#                 section_name = str(image_index + 1) + '/'
-#                 file_name = folder_name + section_name + \
-#                             str(image_part_index + 1) + '.jpg'
-#
-#                 crop_img = img[start_height:end_height, start_width:end_width]
-#                 crop_img = increaseContrast(crop_img, contrastValue)
-#
-#                 image_part_index = image_part_index + 1
-#                 cv2.imwrite(file_name, crop_img)
-#
-#                 make_image_square(file_name)
-
 
 def deleteAll():
     firstIndex = 5
@@ -238,7 +153,7 @@ def crop_image2():
 def detect_image2():
     # Model
     model = torch.hub.load('.', 'custom',
-                           path='/Users/asus/PycharmProjects/finalProject-training/yolov5-master/runs/train/YOLOv5s/weights/best.pt',
+                           path='best.pt',
                            source='local')
 
     batchImg = ('benur_01_01.png', 'benur_01_02.png', 'benur_01_03.png', 'benur_01_04.png', 'benur_01_05.png',
@@ -249,7 +164,7 @@ def detect_image2():
                 )
 
     path = 'C:/Users/asus/PycharmProjects/finalProject-training/yolov5-master/'
-    imgs = [path + f for f in batchImg]  # batch of images
+    imgs = [f for f in batchImg]  # batch of images
     # Inference
     results = model(imgs, size=720)
 
@@ -494,11 +409,11 @@ class StartPage(tk.Frame):
         # backgroud
         self.bg = Button(self, width=1024, height=768, fg='#000', bg='#000', borderwidth=0)
         self.bg.place(x=-2, y=0)
-        self.imageOpen = ImageTk.PhotoImage(Image.open('C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\tambak.jpg'))
+        self.imageOpen = ImageTk.PhotoImage(Image.open('icon/tambak.jpg'))
         self.bg.config(image=self.imageOpen)
 
         # canvas
-        self.canvas = logo(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\back.png', [975, 520], [20, 70], bg='#fff')
+        self.canvas = logo(self, 'icon/back.png', [975, 520], [20, 70], bg='#fff')
         self.canvas.show()
 
         # contain
@@ -507,13 +422,13 @@ class StartPage(tk.Frame):
         self.label1.pack()
         self.label1.place(x=210, y=130)
 
-        self.shrico = logo(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\logo.png', [220, 60], [0, 0], bg='#d4e4e8')
+        self.shrico = logo(self, 'icon/logo.png', [220, 60], [0, 0], bg='#d4e4e8')
         self.shrico.show()
 
-        self.pens = logo(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\pens.png', [65, 55], [932, 0], bg='#d4e4e8')
+        self.pens = logo(self, 'icon/pens.png', [65, 55], [932, 0], bg='#d4e4e8')
         self.pens.show()
 
-        self.sky = logo(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\penssky.png', [215, 55], [714, 0], bg='#d4e4e8')
+        self.sky = logo(self, 'icon/penssky.png', [215, 55], [714, 0], bg='#d4e4e8')
         self.sky.show()
 
         fontStyleLabel = tkFont.Font(family="Arial", size=180)
@@ -530,7 +445,7 @@ class StartPage(tk.Frame):
                                self.Waitcalculate)
         self.button2.buttonShow()
 
-        self.button3 = buttonImg(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\exit.png', [60, 60], [920, 685], ["#000", "#fff"], lambda: self.close())
+        self.button3 = buttonImg(self, 'icon/exit.png', [60, 60], [920, 685], ["#000", "#fff"], lambda: self.close())
         self.button3.buttonShow()
 
     def Waitcalculate(self):
@@ -655,11 +570,11 @@ class Page1(tk.Frame):
         label1.pack()
         label1.place(x=730, y=180)
 
-        self.back = buttonImg(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\home.png', [130, 130], [780, 570], ["#000", "#fff"],
+        self.back = buttonImg(self, 'icon/home.png', [130, 130], [780, 570], ["#000", "#fff"],
                               lambda: [controller.show_frame(StartPage), videoStream.onClose(self.videoObj)])
         self.back.buttonShow()
 
-        self.ledButton = buttonImg(self, 'C:\\Users\\asus\\PycharmProjects\\finalProject-training\\yolov5-master\\icon\\sun.png', [80, 80], [35, 50], [BlackSolid, "#fff"],
+        self.ledButton = buttonImg(self, 'icon/sun.png', [80, 80], [35, 50], [BlackSolid, "#fff"],
                                    lambda: [self.ledState()])
         self.ledButton.buttonShow()
 
