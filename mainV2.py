@@ -11,7 +11,7 @@ import time
 import RPi.GPIO as GPIO
 import cv2
 import image_slicer
-from cv2 import dnn_superres
+# from cv2 import dnn_superres
 import torch
 import os
 
