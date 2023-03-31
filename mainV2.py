@@ -11,7 +11,7 @@ import time
 import RPi.GPIO as GPIO
 import cv2
 import image_slicer
-# from cv2 import dnn_superres
+from cv2 import dnn_superres
 import torch
 import os
 
@@ -91,15 +91,15 @@ def deleteAll():
 
 
 def upscale():
-    # # Create an SR object
-    # sr = dnn_superres.DnnSuperResImpl_create()
-    #
-    # # Read the desired model
-    # path = "ESPCN_x4.pb"
-    # sr.readModel(path)
-    #
-    # # Set the desired model and scale to get correct pre- and post-processing
-    # sr.setModel("espcn", 4)
+    # Create an SR object
+    sr = dnn_superres.DnnSuperResImpl_create()
+
+    # Read the desired model
+    path = "ESPCN_x4.pb"
+    sr.readModel(path)
+
+    # Set the desired model and scale to get correct pre- and post-processing
+    sr.setModel("espcn", 4)
 
     firstIndex = 5
     secondIndex = 5
@@ -115,8 +115,8 @@ def upscale():
             dim = (width, height)
 
             # Upscale the image
-            result = cv2.resize(image, dim, interpolation=cv2.INTER_LINEAR)
-            # result = sr.upsample(image)
+            # result = cv2.resize(image, dim, interpolation=cv2.INTER_LINEAR)
+            result = sr.upsample(image)
             cv2.imwrite(image_name, result)
             print(image_name)
 
