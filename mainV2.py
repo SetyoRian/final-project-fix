@@ -25,10 +25,12 @@ ser = serial.Serial(port="/dev/ttyS0",
                     timeout=1)
 
 GPIO.setmode(GPIO.BCM)
-# The GPIO.BCM option means that we are referring to the pins by the “Broadcom SOC channel” number, these are the numbers after “GPIO”
+# The GPIO.BCM option means that we are referring to the pins by the “Broadcom SOC channel” number, these are the
+# numbers after “GPIO”
 
 GPIO.setwarnings(False)
-# We use this line of code to avoid warning messages because we don’t end the GPIO connection properly while interrupting the program
+# We use this line of code to avoid warning messages because we don’t end the GPIO connection properly while
+# interrupting the program
 
 # DEFINE GPIO Relay Pins
 relay = 21
